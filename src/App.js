@@ -2,10 +2,10 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/logIn';
-import Dashboard from './pages/dashBoard';
+import Dashboard from './pages/DashBoard';
 import Deposit from './pages/deposit';
 import Withdrawl from './pages/withdrawl';
-import Balance from './pages/balance'
+import Balance from './pages/Balance'
 
 
 function App() {

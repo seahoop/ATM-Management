@@ -5,11 +5,11 @@ function Login() {
   const navigate = useNavigate();
 
   const characters = [
-    { id: 1, name: 'Alice', account: 'A123', pin: '1111', Balance: 75000.00 },
-    { id: 2, name: 'Bob', account: 'B456', pin: '2222', Balance: 82000.00 },
-    { id: 3, name: 'Charlie', account: 'C789', pin: '3333', Balance: 910000.00 },
-    { id: 4, name: 'Diana', account: 'D012', pin: '4444', Balance: 670000.00 },
-    { id: 5, name: 'Eve', account: 'E345', pin: '5555', Balance: 590000.00 },
+    { id: 1, name: 'Alice', account: 'A123', pin: '1111', Balance: (Math.random()*1000000) + 50000 },
+    { id: 2, name: 'Bob', account: 'B456', pin: '2222', Balance:(Math.random()*1000000) + 50000},
+    { id: 3, name: 'Charlie', account: 'C789', pin: '3333', Balance:(Math.random()*1000000) + 50000 },
+    { id: 4, name: 'Diana', account: 'D012', pin: '4444', Balance: (Math.random()*1000000) + 50000 },
+    { id: 5, name: 'Eve', account: 'E345', pin: '5555', Balance: (Math.random()*1000000) + 50000 },
   ];
 
   const [selectedCharacter, setSelectedCharacter] = useState(null);

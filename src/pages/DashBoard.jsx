@@ -20,7 +20,7 @@ function Dashboard() {
   };
 
   const handleBalance = () => {
-    navigate('/balance');
+    navigate('/balance', {state: { user }});
   }
 
   const handleDeposit = () => {

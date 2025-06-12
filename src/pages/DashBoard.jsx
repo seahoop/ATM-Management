@@ -15,9 +15,9 @@ function Dashboard() {
 
   if (!user) return null;
 
-  const handleBack = () => {
-    navigate('/');
-  };
+ const handleBack = () => {
+  window.location.replace('http://localhost:5000/auth/logout');
+};
 
   const handleBalance = () => {
     navigate('/balance', {state: { user }});
@@ -30,6 +30,10 @@ function Dashboard() {
   const handleWithdrawl = () => {
     navigate('/withdrawl');
   }
+
+  const handleMarket = () => {
+    navigate('/stockMarket', {state: {user}});
+  }
   return (
     <div style={{ padding: '20px' }}>
       <h2>Welcome, {user.name}!</h2>
@@ -37,6 +41,7 @@ function Dashboard() {
       <button onClick={handleBalance}>Balance</button>
       <button onClick={handleDeposit}>Deposit</button>
       <button onClick={handleWithdrawl}>Withdrawl</button>
+      <button onClick={handleMarket}>Stock Market</button>
       <button onClick={handleBack} style={{marginTop: '20px'}}> Back to Login</button>
     </div>
   );

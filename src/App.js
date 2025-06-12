@@ -6,7 +6,8 @@ import Dashboard from './pages/DashBoard';
 import Deposit from './pages/deposit';
 import Withdrawl from './pages/withdrawl';
 import Balance from './pages/Balance'
-
+import StockMarket from './pages/StockMarket';
+import Callback from './pages/Callback';
 
 function App() {
 
@@ -15,9 +16,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Login/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
+         <Route path="/callback" element={<Callback />} />
         <Route path="/deposit" element={<Deposit />}/>
         <Route path="/withdrawl" element={<Withdrawl />}/>
         <Route path="/balance" element={<Balance/>}/>
+        <Route path="/stockMarket" element={<StockMarket/>}/>
       </Routes>
     </Router>
   );

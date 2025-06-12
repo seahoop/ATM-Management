@@ -1,52 +1,43 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import '../pagesCss/logIn.css'; 
 
 function Login() {
-  const navigate = useNavigate();
-
-  const characters = [
-    { id: 1, name: 'Alice', account: 'A123', pin: '1111', Balance: (Math.random()*1000000) + 50000 },
-    { id: 2, name: 'Bob', account: 'B456', pin: '2222', Balance:(Math.random()*1000000) + 50000},
-    { id: 3, name: 'Charlie', account: 'C789', pin: '3333', Balance:(Math.random()*1000000) + 50000 },
-    { id: 4, name: 'Diana', account: 'D012', pin: '4444', Balance: (Math.random()*1000000) + 50000 },
-    { id: 5, name: 'Eve', account: 'E345', pin: '5555', Balance: (Math.random()*1000000) + 50000 },
-  ];
-
-  const [selectedCharacter, setSelectedCharacter] = useState(null);
-
-  const handleRandomSelect = () => {
-    const random = characters[Math.floor(Math.random() * characters.length)];
-    setSelectedCharacter(random);
-  };
-
   const handleLogin = () => {
-    if (selectedCharacter) {
-      navigate('/dashboard', { state: { user: selectedCharacter } });
-    } else {
-      alert('Please select a character first!');
-    }
+    window.location.href = 'http://localhost:5000/auth/login';
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Welcome to Habo Berlin ATM System</h2>
-
-      {selectedCharacter ? (
-        <div style={{ margin: '10px 0', padding: '10px', border: '1px solid gray' }}>
-          <p><strong>Selected:</strong> {selectedCharacter.name}</p>
-          <p><strong>Account:</strong> {selectedCharacter.account}</p>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-logo">
+          <span className="logo-text">HABO</span>
+          <span className="logo-dot"></span>
+          <span className="logo-text-secondary">BERLIN</span>
         </div>
-      ) : (
-        <p>No character selected.</p>
-      )}
-
-      <button onClick={handleRandomSelect} style={{ marginRight: '10px' }}>
-        🎲 Random Character
-      </button>
-
-      <button onClick={handleLogin}>
-        🚀 Log In
-      </button>
+        
+        <h2 className="login-title">Welcome to the Future of Banking</h2>
+        
+        <div className="login-backdrop">
+          <div className="berlin-skyline"></div>
+        </div>
+        
+        <p className="login-message">Please authenticate to continue</p>
+        
+        <button onClick={handleLogin} className="login-button">
+          <span className="button-text">Access Account</span>
+          <span className="button-icon">→</span>
+        </button>
+        
+        <div className="login-footer">
+          <span className="security-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Secured Connection
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

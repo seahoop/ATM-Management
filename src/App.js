@@ -3,11 +3,12 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/logIn';
 import Dashboard from './pages/DashBoard';
-import Deposit from './pages/deposit';
+import Deposit from './pages/Deposit';
 import Withdrawl from './pages/withdrawl';
 import Balance from './pages/Balance'
 import StockMarket from './pages/StockMarket';
 import Callback from './pages/Callback';
+import HaboAi from './pages/HaboAi';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/withdrawl" element={<Withdrawl />}/>
         <Route path="/balance" element={<Balance/>}/>
         <Route path="/stockMarket" element={<StockMarket/>}/>
+        <Route path="/haboAi" element={<HaboAi/>}/>
       </Routes>
     </Router>
   );

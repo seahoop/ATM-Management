@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import '../pagesCss/dashboard.css';
 
 function Dashboard() {
   const location = useLocation();
@@ -15,34 +16,84 @@ function Dashboard() {
 
   if (!user) return null;
 
- const handleBack = () => {
-  window.location.replace('http://localhost:5000/auth/logout');
-};
+  // Navigation handler functions
+  const handleBack = () => {
+    window.location.replace('http://localhost:5000/auth/logout');
+  };
 
   const handleBalance = () => {
     navigate('/balance', {state: { user }});
   }
 
   const handleDeposit = () => {
-    navigate('/deposit');
+    navigate('/deposit', {state: {user}});
   }
 
   const handleWithdrawl = () => {
-    navigate('/withdrawl');
+    navigate('/withdrawl', {state: {user}});
   }
 
   const handleMarket = () => {
     navigate('/stockMarket', {state: {user}});
   }
+
+  const handleBot = () => {
+    navigate('/haboAi', {state: {user}});
+  }
+  
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Welcome, {user.name}!</h2>
-      <p><strong>Account Number:</strong> {user.account}</p>
-      <button onClick={handleBalance}>Balance</button>
-      <button onClick={handleDeposit}>Deposit</button>
-      <button onClick={handleWithdrawl}>Withdrawl</button>
-      <button onClick={handleMarket}>Stock Market</button>
-      <button onClick={handleBack} style={{marginTop: '20px'}}> Back to Login</button>
+    <div className="dashboard-container">
+      <div className="dashboard-card">
+        <div className="dashboard-header">
+          <div className="dashboard-logo">
+            <span className="logo-text">HABO</span>
+            <span className="logo-dot"></span>
+            <span className="logo-text-secondary">BERLIN</span>
+          </div>
+        </div>
+        
+        <h1 className="dashboard-title">Banking Dashboard</h1>
+        
+        <p className="dashboard-welcome">
+          Welcome, <span>{user.name}</span>. What would you like to do today?
+        </p>
+        
+        <div className="dashboard-actions">
+          <button onClick={handleBalance} className="dashboard-button balance">
+            <span className="button-icon">💰</span>
+            <span className="button-label">Check Balance</span>
+          </button>
+          
+          <button onClick={handleDeposit} className="dashboard-button deposit">
+            <span className="button-icon">⬆️</span>
+            <span className="button-label">Deposit Funds</span>
+          </button>
+          
+          <button onClick={handleWithdrawl} className="dashboard-button withdrawal">
+            <span className="button-icon">⬇️</span>
+            <span className="button-label">Withdraw Funds</span>
+          </button>
+          
+          <button onClick={handleMarket} className="dashboard-button market">
+            <span className="button-icon">📈</span>
+            <span className="button-label">Stock Market</span>
+          </button>
+          
+          <button onClick={handleBot} className="dashboard-button chatbot">
+            <span className="button-icon">🤖</span>
+            <span className="button-label">AI Assistant</span>
+          </button>
+        </div>
+        
+        <button onClick={handleBack} className="logout-button">
+          <span className="logout-icon">🔒</span>
+          Sign Out
+        </button>
+        
+        <div className="dashboard-backdrop">
+          <div className="berlin-skyline"></div>
+        </div>
+      </div>
     </div>
   );
 }

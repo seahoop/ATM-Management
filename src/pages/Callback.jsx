@@ -7,7 +7,7 @@ function Callback() {
   useEffect(() => {
     console.log('🌐 Callback page loaded');
 
-    fetch('http://localhost:5000/auth/user', {
+    fetch('http://localhost:5000/api/user', { // Changed from /auth/user to /api/user
       credentials: 'include'
     })
       .then(res => {
@@ -24,7 +24,25 @@ function Callback() {
       });
   }, [navigate]);
 
-  return <p>Logging in...</p>;
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      background: '#121212',
+      color: '#00C2FF',
+      fontFamily: 'Space Grotesk, sans-serif'
+    }}>
+      <div style={{
+        textAlign: 'center',
+        animation: 'pulse 1.5s infinite'
+      }}>
+        <h2>Logging in to Habo Banking...</h2>
+        <div style={{marginTop: '20px'}}>Please wait</div>
+      </div>
+    </div>
+  );
 }
 
 export default Callback;

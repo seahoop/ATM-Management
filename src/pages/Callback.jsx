@@ -7,7 +7,7 @@ function Callback() {
   useEffect(() => {
     console.log('🌐 Callback page loaded');
 
-    fetch('http://localhost:5000/api/user', { // Changed from /auth/user to /api/user
+    fetch('http://localhost:5001/api/user', { // Changed from /auth/user to /api/user
       credentials: 'include'
     })
       .then(res => {

@@ -18,7 +18,7 @@ function Dashboard() {
 
   // Navigation handler functions
   const handleBack = () => {
-    window.location.replace('http://localhost:5000/auth/logout');
+    window.location.replace('http://localhost:5001/auth/logout');
   };
 
   const handleBalance = () => {

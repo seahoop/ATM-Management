@@ -5,7 +5,7 @@ import Login from './pages/logIn';
 import Dashboard from './pages/DashBoard';
 import Deposit from './pages/Deposit';
 import Withdrawl from './pages/withdrawl';
-import Balance from './pages/Balance'
+import Balance from './pages/Balance';
 import StockMarket from './pages/StockMarket';
 import Callback from './pages/Callback';
 import HaboAi from './pages/HaboAi';

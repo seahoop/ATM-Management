@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 5000;
+const PORT = 5001;
 
 // Middleware setup
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
@@ -30,11 +30,11 @@ let client;
 // Initialize AWS Cognito OpenID Connect client
 async function initializeClient() {
   try {
-   const issuer = await Issuer.discover('https://us-east-2lylzuyppl.auth.us-east-2.amazoncognito.com/oauth2/.well-known/openid-configuration');. b
+   const issuer = await Issuer.discover('https://cognito-idp.us-east-2.amazonaws.com/us-east-2_Lylzuyppl/.well-known/openid-configuration');
     client = new issuer.Client({
       client_id: '4ecd14vqq0niscmt2lhv7cqac7',
       // Don't include client_secret if this is a public client
-      redirect_uris: ['http://localhost:5000/auth/callback'],
+      redirect_uris: ['http://localhost:5001/auth/callback'],
       response_types: ['code'],
     });
     console.log('AWS Cognito client initialized successfully');
@@ -68,7 +68,7 @@ app.get('/auth/callback', async (req, res) => {
   try {
     const params = client.callbackParams(req);
     const tokenSet = await client.callback(
-      'http://localhost:5000/auth/callback', 
+      'http://localhost:5001/auth/callback', 
       params, 
       {
         nonce: req.session.nonce,

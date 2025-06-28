@@ -3,7 +3,7 @@ import '../pagesCss/logIn.css';
 
 function Login() {
   const handleLogin = () => {
-    window.location.href = 'http://localhost:5000/auth/login';
+    window.location.href = 'http://localhost:5001/auth/login';
   };
 
   return (

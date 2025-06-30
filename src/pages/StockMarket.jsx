@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
-import { getStockQuote, getCompanyProfile, getMockStockData } from './services/stockIntegration';
+import { getStockQuote, getCompanyProfile, getMockStockData, getMajorStocksData } from './services/stockIntegration';
 import '../pagesCss/StockMarket.css';
 
 function StockMarket() {
@@ -39,14 +39,16 @@ function StockMarket() {
             setLoading(true);
             setError(null);
 
-            // For demonstration, we'll use mock data
-            // In production, you would use the actual API calls
-            const mockData = getMockStockData();
-            
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            setStockData(mockData);
+            // Try to fetch real-time data first
+            try {
+                const realTimeData = await getMajorStocksData();
+                setStockData(realTimeData);
+            } catch (apiError) {
+                console.log('API not available, using mock data:', apiError);
+                // Fallback to mock data if API fails
+                const mockData = getMockStockData();
+                setStockData(mockData);
+            }
         } catch (err) {
             setError('Failed to fetch stock data. Please try again later.');
             console.error('Error fetching stock data:', err);
@@ -54,7 +56,6 @@ function StockMarket() {
             setLoading(false);
         }
     };
-
 
     if (!user) {
         return <div className="stock-market-container">No user data available.</div>;
@@ -175,14 +176,6 @@ function StockMarket() {
                         </div>
                     </div>
                 </div>
-
-                <div className="chart-placeholder">
-                    <h3>Price Chart</h3>
-                    <div className="chart-container">
-                        <p>Chart visualization would be displayed here</p>
-                        <p>You can integrate libraries like Chart.js or Recharts for actual charts</p>
-                    </div>
-                </div>
             </div>
         );
     };
@@ -224,7 +217,7 @@ function StockMarket() {
 
             <div className="stock-market-content">
                 <div className="stock-cards-container">
-                    <h2>Available Stocks</h2>
+                    <h2>Available Stocks ({Object.keys(stockData).length})</h2>
                     <div className="stock-cards">
                         {Object.entries(stockData).map(([key, data]) => (
                             <StockCard key={key} stockKey={key} data={data} />

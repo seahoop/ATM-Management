@@ -1,3 +1,9 @@
+// This React component displays real-time stock data for selected companies.
+// It fetches data using the Finnhub API or fallback mock data if needed.
+// It shows summarized stock cards and a detailed panel for the selected stock.
+// Supports auto-refresh every 30 seconds and manual refresh.
+
+// Dependencies
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { getStockQuote, getCompanyProfile, getMockStockData, getMajorStocksData } from './services/stockIntegration';
@@ -8,44 +14,51 @@ function StockMarket() {
     const location = useLocation();
     const user = location.state?.user;
 
+    // Behavior: Stores the stock data
+    // Return: Object mapping stock keys to their data
     const [stockData, setStockData] = useState({});
+
+    // Behavior: Tracks loading status
     const [loading, setLoading] = useState(true);
+
+    // Behavior: Tracks error message
     const [error, setError] = useState(null);
+
+    // Behavior: Stores which stock is currently selected
     const [selectedStock, setSelectedStock] = useState('nvidia');
+
+    // Behavior: Stores interval ID to clear auto-refresh on unmount
     const [refreshInterval, setRefreshInterval] = useState(null);
 
-    // Set up auto-refresh every 30 seconds
+    // Behavior: Runs once on mount to fetch initial data and set interval
     useEffect(() => {
         fetchStockData();
-        
-        const interval = setInterval(fetchStockData, 30000);
+        const interval = setInterval(fetchStockData, 30000); // 30 seconds
         setRefreshInterval(interval);
-
         return () => {
             if (interval) clearInterval(interval);
         };
     }, []);
 
-    // Cleanup interval on unmount
+    // Behavior: Cleanup interval on component unmount or interval update
     useEffect(() => {
         return () => {
             if (refreshInterval) clearInterval(refreshInterval);
         };
     }, [refreshInterval]);
 
-    // Fetch stock data
+    // Behavior: Fetches stock data from live API or mock fallback
+    // Exceptions: If API fails, logs and falls back to mock data
+    // Return: Updates `stockData` state
     const fetchStockData = async () => {
         try {
             setLoading(true);
             setError(null);
-
-            // Try to fetch real-time data first
             try {
                 const realTimeData = await getMajorStocksData();
                 setStockData(realTimeData);
             } catch (apiError) {
                 console.log('API not available, using mock data:', apiError);
-                // Fallback to mock data if API fails
                 const mockData = getMockStockData();
                 setStockData(mockData);
             }
@@ -57,14 +70,17 @@ function StockMarket() {
         }
     };
 
+    // Behavior: If no user is passed in location state, display error
     if (!user) {
         return <div className="stock-market-container">No user data available.</div>;
     }
 
+    // Behavior: Navigate back to dashboard, preserving user state
     const handleBack = () => {
         navigate('/dashboard', { state: { user } });
     };
 
+    // Behavior: Formats large numbers into human-readable string (e.g., 1.2M)
     const formatNumber = (num) => {
         if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
         if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
@@ -73,6 +89,7 @@ function StockMarket() {
         return num.toString();
     };
 
+    // Behavior: Formats a number as USD currency string
     const formatPrice = (price) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -82,6 +99,10 @@ function StockMarket() {
         }).format(price);
     };
 
+    // Behavior: UI component to render one stock card in the left pane
+    // Parameters: 
+    // - stockKey: String key identifier
+    // - data: Stock data object
     const StockCard = ({ stockKey, data }) => {
         const isPositive = data.change >= 0;
         const isSelected = selectedStock === stockKey;
@@ -125,6 +146,9 @@ function StockMarket() {
         );
     };
 
+    // Behavior: UI component to render the full detailed view of selected stock
+    // Parameters:
+    // - data: Stock data object
     const StockDetail = ({ data }) => {
         if (!data) return null;
 
@@ -180,6 +204,7 @@ function StockMarket() {
         );
     };
 
+    // Behavior: If loading and no data, show loading spinner
     if (loading && Object.keys(stockData).length === 0) {
         return (
             <div className="stock-market-container">
@@ -191,6 +216,7 @@ function StockMarket() {
         );
     }
 
+    // Main render
     return (
         <div className="stock-market-container">
             <div className="stock-market-header">

@@ -1,10 +1,18 @@
+// This module interfaces with the Finnhub stock market API to provide real-time and historical data,
+// including quotes, profiles, news, and candlestick chart data for selected stocks. It also includes 
+// a helper function to retrieve mock stock data for testing when the API is unavailable.
+
 import axios from 'axios';
 
-// You'll need to replace this with your actual Finnhub API key
+// Behavior: Define API key and base URL for Finnhub
+// Exceptions: None
+// Return: Constants used in axios config
 const FINNHUB_API_KEY = 'd1h1ck9r01qkdlvr5d20d1h1ck9r01qkdlvr5d2g';
 const FINNHUB_BASE_URL = 'https://finnhub.io/api/v1';
 
-// Create axios instance with base configuration
+// Behavior: Create an axios instance configured for Finnhub
+// Exceptions: None
+// Return: Configured axios instance
 const finnhubApi = axios.create({
   baseURL: FINNHUB_BASE_URL,
   headers: {
@@ -12,7 +20,12 @@ const finnhubApi = axios.create({
   }
 });
 
-// Get stock symbols for a specific exchange
+// Behavior: Get all stock symbols from a given exchange (default US)
+// Exceptions: Throws if network or API error occurs
+// Return: 
+// - Array of symbol objects from Finnhub
+// Parameters: 
+// - exchange: String (e.g., 'US', 'TO', 'V') specifying which exchange to pull symbols from
 export const getStockSymbols = async (exchange = 'US') => {
   try {
     const response = await finnhubApi.get(`/stock/symbol?exchange=${exchange}`);
@@ -23,7 +36,12 @@ export const getStockSymbols = async (exchange = 'US') => {
   }
 };
 
-// Get real-time quote for a specific stock
+// Behavior: Get real-time stock quote for a specific symbol
+// Exceptions: Throws if network or API error occurs
+// Return: 
+// - Object containing current price, change, high, low, etc.
+// Parameters: 
+// - symbol: String representing stock ticker (e.g., 'AAPL')
 export const getStockQuote = async (symbol) => {
   try {
     const response = await finnhubApi.get(`/quote?symbol=${symbol}`);
@@ -34,7 +52,12 @@ export const getStockQuote = async (symbol) => {
   }
 };
 
-// Get company profile
+// Behavior: Get company profile for a given stock symbol
+// Exceptions: Throws if network or API error occurs
+// Return: 
+// - Object with company name, industry, market cap, etc.
+// Parameters:
+// - symbol: String representing stock ticker (e.g., 'AMZN')
 export const getCompanyProfile = async (symbol) => {
   try {
     const response = await finnhubApi.get(`/stock/profile2?symbol=${symbol}`);
@@ -45,16 +68,19 @@ export const getCompanyProfile = async (symbol) => {
   }
 };
 
-// Get historical data (candles)
+// Behavior: Get historical stock data (candlestick format)
+// Exceptions: Throws if network or API error occurs
+// Return: 
+// - Object with timestamps and OHLC data
+// Parameters:
+// - symbol: Stock ticker
+// - resolution: Time resolution (e.g., 'D', '1', '5')
+// - from: UNIX timestamp for start date
+// - to: UNIX timestamp for end date
 export const getStockCandles = async (symbol, resolution = 'D', from, to) => {
   try {
     const response = await finnhubApi.get(`/stock/candle`, {
-      params: {
-        symbol,
-        resolution,
-        from,
-        to
-      }
+      params: { symbol, resolution, from, to }
     });
     return response.data;
   } catch (error) {
@@ -63,15 +89,18 @@ export const getStockCandles = async (symbol, resolution = 'D', from, to) => {
   }
 };
 
-// Get news for a specific company
+// Behavior: Get company news between two dates
+// Exceptions: Throws if network or API error occurs
+// Return: 
+// - Array of news articles related to the company
+// Parameters: 
+// - symbol: Stock ticker
+// - from: Start date (YYYY-MM-DD)
+// - to: End date (YYYY-MM-DD)
 export const getCompanyNews = async (symbol, from, to) => {
   try {
     const response = await finnhubApi.get(`/company-news`, {
-      params: {
-        symbol,
-        from,
-        to
-      }
+      params: { symbol, from, to }
     });
     return response.data;
   } catch (error) {
@@ -80,25 +109,25 @@ export const getCompanyNews = async (symbol, from, to) => {
   }
 };
 
-// Get real-time data for specific major stocks
+// Behavior: Get real-time data for a predefined list of major stock symbols
+// Combines quote and profile data into one object per stock
+// Exceptions: Throws if any API call fails
+// Return: 
+// - Object mapping lowercase stock keys to detailed data objects
 export const getMajorStocksData = async () => {
   const stockSymbols = ['NVDA', 'AAPL', '2222.SR', 'COST', 'AMZN', 'MSFT', 'GOOGL'];
   const stockData = {};
 
   try {
-    // Fetch quotes for all stocks in parallel
     const quotePromises = stockSymbols.map(symbol => getStockQuote(symbol));
     const quotes = await Promise.all(quotePromises);
 
-    // Fetch company profiles for all stocks in parallel
     const profilePromises = stockSymbols.map(symbol => getCompanyProfile(symbol));
     const profiles = await Promise.all(profilePromises);
 
-    // Combine the data
     stockSymbols.forEach((symbol, index) => {
       const quote = quotes[index];
       const profile = profiles[index];
-      
       if (quote && profile) {
         const stockKey = getStockKeyFromSymbol(symbol);
         stockData[stockKey] = {
@@ -123,7 +152,12 @@ export const getMajorStocksData = async () => {
   }
 };
 
-// Helper function to convert symbol to stock key
+// Behavior: Convert stock ticker to camelCase key used in object mapping
+// Exceptions: Returns symbol in lowercase if not in map
+// Return:
+// - String representing key
+// Parameters:
+// - symbol: Stock ticker (e.g., 'AAPL')
 const getStockKeyFromSymbol = (symbol) => {
   const symbolMap = {
     'NVDA': 'nvidia',
@@ -137,7 +171,12 @@ const getStockKeyFromSymbol = (symbol) => {
   return symbolMap[symbol] || symbol.toLowerCase();
 };
 
-// Helper function to format market cap
+// Behavior: Convert raw market cap value to readable format
+// Exceptions: Returns 'N/A' if marketCap is null/undefined
+// Return:
+// - String like '1.2T', '500M', etc.
+// Parameters:
+// - marketCap: Number representing market cap in dollars
 const formatMarketCap = (marketCap) => {
   if (!marketCap) return 'N/A';
   if (marketCap >= 1e12) return (marketCap / 1e12).toFixed(1) + 'T';
@@ -146,7 +185,10 @@ const formatMarketCap = (marketCap) => {
   return marketCap.toString();
 };
 
-// Mock data for demonstration (when API key is not available)
+// Behavior: Returns hardcoded mock stock data for offline testing or fallback mode
+// Exceptions: None
+// Return:
+// - Object containing sample stock quote + profile data for 7 major companies
 export const getMockStockData = () => {
   return {
     nvidia: {
@@ -159,7 +201,7 @@ export const getMockStockData = () => {
       low: 478.20,
       volume: 45678900,
       marketCap: '1.2T',
-      description: 'NVIDIA Corporation designs and manufactures computer graphics processors, chipsets, and related multimedia software. The company is a leader in AI computing and gaming technologies.'
+      description: 'NVIDIA Corporation designs and manufactures computer graphics processors...'
     },
     apple: {
       symbol: 'AAPL',
@@ -171,7 +213,7 @@ export const getMockStockData = () => {
       low: 174.20,
       volume: 67890100,
       marketCap: '2.7T',
-      description: 'Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. The company is known for its innovative consumer electronics and software.'
+      description: 'Apple Inc. designs, manufactures, and markets smartphones...'
     },
     saudiAramco: {
       symbol: '2222.SR',
@@ -183,7 +225,7 @@ export const getMockStockData = () => {
       low: 31.90,
       volume: 12345600,
       marketCap: '2.1T',
-      description: 'Saudi Arabian Oil Company (Saudi Aramco) is the world\'s largest integrated oil and gas company. It engages in the exploration, production, refining, distribution, and marketing of petroleum and natural gas.'
+      description: 'Saudi Arabian Oil Company (Saudi Aramco) is the world\'s largest integrated oil and gas company...'
     },
     costco: {
       symbol: 'COST',
@@ -195,7 +237,7 @@ export const getMockStockData = () => {
       low: 675.30,
       volume: 23456700,
       marketCap: '300B',
-      description: 'Costco Wholesale Corporation operates membership warehouses that offer branded and private-label products in a range of merchandise categories. The company is known for its bulk retail model and competitive pricing.'
+      description: 'Costco Wholesale Corporation operates membership warehouses...'
     },
     amazon: {
       symbol: 'AMZN',
@@ -207,7 +249,7 @@ export const getMockStockData = () => {
       low: 143.80,
       volume: 56789000,
       marketCap: '1.5T',
-      description: 'Amazon.com Inc. engages in the retail sale of consumer products and subscriptions in North America and internationally. The company operates through North America, International, and Amazon Web Services segments.'
+      description: 'Amazon.com Inc. engages in the retail sale of consumer products...'
     },
     microsoft: {
       symbol: 'MSFT',
@@ -219,7 +261,7 @@ export const getMockStockData = () => {
       low: 375.40,
       volume: 34567800,
       marketCap: '2.8T',
-      description: 'Microsoft Corporation develops, licenses, and supports software, services, devices, and solutions worldwide. The company is a leader in cloud computing, productivity software, and gaming technologies.'
+      description: 'Microsoft Corporation develops, licenses, and supports software...'
     },
     google: {
       symbol: 'GOOGL',
@@ -231,7 +273,7 @@ export const getMockStockData = () => {
       low: 141.20,
       volume: 45678900,
       marketCap: '1.8T',
-      description: 'Alphabet Inc. provides online advertising services in the United States, Europe, the Middle East, Africa, the Asia-Pacific, Canada, and Latin America. The company operates through Google Services, Google Cloud, and Other Bets segments.'
+      description: 'Alphabet Inc. provides online advertising services and operates Google Cloud...'
     }
   };
 };

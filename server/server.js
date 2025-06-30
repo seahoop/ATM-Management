@@ -6,7 +6,7 @@ const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
 const { Issuer, generators } = require('openid-client');
-
+const fetch = require('node-fetch');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -24,6 +24,82 @@ app.use(session({
 let client;
 const codeVerifier = generators.codeVerifier();
 const codeChallenge = generators.codeChallenge(codeVerifier);
+
+// Behavior: Handles chat requests from the frontend byverifying authentication, 
+// sending the user message to DeepSeek API only for banking related questions
+// Exceptions: 
+// - Returns 401 if user is not authenticated
+// - Returns 400 if message is invalid
+// - Returns 500 if AI response generation fails
+// Return: 
+// - Json: {message: String} - The AI-generated response message
+// Parameters: 
+// - req: The incoming request containing the user message
+// - res: The outgoing response containing the AI-generated reply
+app.post('/api/chat', async (req, res) => {
+  if(!req.session.userInfo) {
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+
+  const { message } = req.body;
+
+  if(!message || typeof message !== 'string') {
+    return res.status(400).json({ error: 'Invalid message' });
+  }
+
+  try {
+    const aiResponse = await generateBankingResponse(message);
+    res.json({ message: aiResponse});
+  } catch (error) {
+    console.error('Error generating AI response:', error);
+    res.status(500).json({ error: 'Failed to generate AI response' });
+  }
+});
+
+// Behavior: Sends the user message to DeepSeek API with a banking-focused system prompt
+// Exceptions: 
+// - Throws if DeepSeek API request fails
+// Return: 
+// - String: The AI-generated response content
+// Parameters: 
+// - userMessage: The user's input message
+async function generateBankingResponse(userMessage) {
+  try {
+    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are Habo AI, a helpful banking assistant for Habo Banking. You help customers with banking-related questions, account information, deposits, withdrawals, transfers, loans, investments, and general banking services. Be friendly, professional, and helpful. Keep responses concise but informative.'
+          },
+          {
+            role: 'user',
+            content: userMessage
+          }
+        ],
+        max_tokens: 500,
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`DeepSeek API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error('DeepSeek API error:', error);
+    // Fallback response if API fails
+    return "I apologize, but I'm having trouble connecting to my AI service right now. Please try again in a moment, or you can use the banking features in your dashboard for immediate assistance.";
+  }
+}
 
 // Behavior: Initialize OpenID Connect client using AWS Cognito's discovery endpoint. Creates a client that can generate auth URLs
 // and handle callback Logic. 

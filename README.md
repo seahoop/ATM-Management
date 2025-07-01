@@ -1,10 +1,9 @@
 # Project Name: Habo Bank ATM System
+# Project Deployed Link: 
 # Project Description:
 - Habo Bank ATM System simulate real life ATM Systems. It allows users to securely perform basic banking transactions such as cash withdrawls, deposits, balance inquiries, fund transfers, and account management tasks.
 # Initial Imaginary UI/UX Design
 - https://www.figma.com/design/351xFnvZ9rYpG0jcntOAPX/ATM-System?t=g7SZS2hllGfKNV4R-1
-# File Structure Of Project
-# Technology Used
 # User Stories
 - As a user, I want to securely log in with my account number and PIN so that I can access my banking services.
 

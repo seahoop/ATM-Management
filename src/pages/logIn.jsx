@@ -2,8 +2,7 @@ import '../pagesCss/logIn.css';
 
 function Login() {
   const handleLogin = () => {
-  const API_BASE_URL = atmmanagementbackend-adac8fcbef4e.herokuapp.com || "http://localhost:5001";
-  window.location.href = `${API_BASE_URL}/auth/login`;
+  window.location.href = 'http://localhost:5001/auth/login';
   };
 
   return (

@@ -3,7 +3,7 @@ import '../pagesCss/logIn.css';
 function Login() {
   const handleLogin = () => {
   const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
-  window.location.href = `${API_BASE_URL}/auth/login`;
+  window.location.href = `https://atmmanagementbackend-adac8fcbef4e.herokuapp.com/auth/callback`;
   };
 
   return (

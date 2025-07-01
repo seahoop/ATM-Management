@@ -110,7 +110,7 @@ async function initializeClient() {
   client = new issuer.Client({
     client_id: '4ecd14vqq0niscmt2lhv7cqac7',
     client_secret: process.env.COGNITO_CLIENT_SECRET,
-    redirect_uris: ['http://localhost:5001/auth/callback'],
+    redirect_uris: ['https://atmmanagementbackend-adac8fcbef4e.herokuapp.com/auth/callback'],
     response_types: ['code']
   });
   console.log('Cognito OIDC client initialized successfully');

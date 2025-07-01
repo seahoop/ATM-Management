@@ -284,3 +284,107 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+
+/* --- Balance, Deposit, Withdrawl Shared Styles --- */
+.balance-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 40px auto 0 auto;
+  background: rgba(18, 18, 18, 0.85);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 36px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.8s;
+  position: relative;
+  z-index: 2;
+}
+
+.balance-label {
+  font-size: 18px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.balance-amount {
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+.balance-action-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.balance-input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.13);
+  background: rgba(255,255,255,0.07);
+  color: var(--light);
+  font-size: 1.1rem;
+  outline: none;
+  transition: border 0.2s;
+  margin-bottom: 4px;
+}
+
+.balance-input:focus {
+  border: 1.5px solid var(--primary);
+  background: rgba(0,194,255,0.08);
+}
+
+.balance-action-btn {
+  width: 100%;
+  padding: 14px 0;
+  border-radius: 10px;
+  border: none;
+  background: var(--gradient);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,194,255,0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.balance-action-btn:hover {
+  background: linear-gradient(135deg, #00e676 0%, #00c2ff 100%);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.balance-error {
+  color: var(--secondary);
+  background: rgba(255,87,87,0.08);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  font-size: 0.98rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .balance-card {
+    padding: 24px 8px 20px 8px;
+    max-width: 98vw;
+  }
+  .balance-amount {
+    font-size: 2rem;
+  }
+}
+/* --- End of Balance, Deposit, Withdrawl Shared Styles --- */

@@ -1,10 +1,13 @@
 import {useNavigate, useLocation} from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useContext} from "react";
+import { BalanceContext } from './BalanceContext';
+import '../pagesCss/dashboard.css';
 
 function Balance() {
     const location = useLocation();
     const navigate = useNavigate();
     const user = location.state?.user;
+    const { balance } = useContext(BalanceContext);
 
     useEffect(() => {
         if(!user) {
@@ -19,9 +22,10 @@ function Balance() {
     };
 
     return (
-        <div>
-            <h2>Balance</h2>
-            <button onClick={handleBack} style={{marginTop: '20px'}}> Back to Dashboard</button>
+        <div className="balance-card">
+            <div className="balance-label">Current Balance</div>
+            <div className="balance-amount">${balance.toFixed(2)}</div>
+            <button className="balance-action-btn" onClick={handleBack}>Back to Dashboard</button>
         </div>
     );
 }

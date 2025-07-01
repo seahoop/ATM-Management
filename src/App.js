@@ -9,10 +9,12 @@ import Balance from './pages/Balance';
 import StockMarket from './pages/StockMarket';
 import Callback from './pages/Callback';
 import HaboAi from './pages/HaboAi';
+import {BalanceProvider} from './pages/BalanceContext';
 
 function App() {
 
   return (
+    <BalanceProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Login/>}/>
@@ -25,6 +27,7 @@ function App() {
         <Route path="/haboAi" element={<HaboAi/>}/>
       </Routes>
     </Router>
+    </BalanceProvider>
   );
 }
 

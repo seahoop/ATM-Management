@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import '../pagesCss/logIn.css'; 
 
 function Login() {

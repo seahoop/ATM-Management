@@ -6,7 +6,7 @@
 // Dependencies
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
-import { getStockQuote, getCompanyProfile, getMockStockData, getMajorStocksData } from './services/stockIntegration';
+import { getMockStockData, getMajorStocksData } from './services/stockIntegration';
 import '../pagesCss/StockMarket.css';
 
 function StockMarket() {

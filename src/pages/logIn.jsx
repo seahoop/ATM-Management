@@ -3,7 +3,8 @@ import '../pagesCss/logIn.css';
 
 function Login() {
   const handleLogin = () => {
-    window.location.href = 'http://localhost:5001/auth/login';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
+  window.location.href = `${API_BASE_URL}/auth/login`;
   };
 
   return (

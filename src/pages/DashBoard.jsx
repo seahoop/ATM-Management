@@ -18,7 +18,8 @@ function Dashboard() {
 
   // Navigation handler functions
   const handleBack = () => {
-    window.location.replace('http://localhost:5001/auth/logout');
+    const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
+    window.location.replace(`${API_BASE_URL}/auth/logout`);
   };
 
   const handleBalance = () => {

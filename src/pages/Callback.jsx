@@ -7,9 +7,9 @@ function Callback() {
   useEffect(() => {
     console.log('🌐 Callback page loaded');
 
-    fetch('http://localhost:5001/api/user', { // Changed from /auth/user to /api/user
-      credentials: 'include'
-    })
+    const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
+    fetch(`${API_BASE_URL}/api/user`, { credentials: 'include' })
+
       .then(res => {
         if (!res.ok) throw new Error('Not Logged In');
         return res.json();

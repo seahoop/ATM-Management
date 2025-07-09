@@ -6,8 +6,47 @@
 // Dependencies
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
-import { getMockStockData, getMajorStocksData } from './services/stockIntegration';
 import '../pagesCss/StockMarket.css';
+
+// Mock data functions for fallback
+const getMockStockData = () => ({
+    nvidia: {
+        symbol: 'NVDA',
+        companyName: 'NVIDIA Corporation',
+        currentPrice: 485.09,
+        change: 12.45,
+        changePercent: 2.63,
+        high: 492.50,
+        low: 478.20,
+        volume: 45678900,
+        marketCap: '1.2T',
+        description: 'Semiconductor company specializing in graphics processing units'
+    },
+    apple: {
+        symbol: 'AAPL',
+        companyName: 'Apple Inc.',
+        currentPrice: 175.43,
+        change: -2.15,
+        changePercent: -1.21,
+        high: 178.90,
+        low: 174.20,
+        volume: 67890100,
+        marketCap: '2.7T',
+        description: 'Technology company that designs and manufactures consumer electronics'
+    },
+    microsoft: {
+        symbol: 'MSFT',
+        companyName: 'Microsoft Corporation',
+        currentPrice: 378.85,
+        change: 5.67,
+        changePercent: 1.52,
+        high: 380.10,
+        low: 375.30,
+        volume: 23456700,
+        marketCap: '2.8T',
+        description: 'Technology company that develops, manufactures, and supports software products'
+    }
+});
 
 function StockMarket() {
     const navigate = useNavigate();
@@ -62,7 +101,11 @@ function StockMarket() {
             console.log('Attempting to fetch real-time stock data...');
             
             try {
-                const realTimeData = await getMajorStocksData();
+                const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5003'}/api/stock/major-stocks`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const realTimeData = await response.json();
                 console.log('Successfully fetched real-time data:', Object.keys(realTimeData));
                 setStockData(realTimeData);
                 setUsingMockData(false);

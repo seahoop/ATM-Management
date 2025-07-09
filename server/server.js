@@ -13,7 +13,7 @@ const SQLiteStore = require('connect-sqlite3')(session);
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-const { setupStockRoutes } = require('./stockMarket');
+const { setupStockRoutes } = require('./stockIntegration');
 
 // Ensure db directory exists for SQLite
 if (process.env.NODE_ENV === 'production') {

@@ -1,4 +1,4 @@
-// Finnhub API configuration from environment variables
+// Finnhub API configuration from environment variable
 const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY || 'd1h1ck9r01qkdlvr5d20d1h1ck9r01qkdlvr5d2g';
 const FINNHUB_BASE_URL = 'https://finnhub.io/api/v1';
 
